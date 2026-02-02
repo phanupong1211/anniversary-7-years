@@ -140,6 +140,12 @@
     .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
     @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
 
+    /* Fade In Up for Gallery */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Scratch Card Canvas */
     #scratch-canvas {
         touch-action: none; /* Prevent scroll while scratching */
@@ -178,7 +184,11 @@
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485047_0.jpg",
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485048_0.jpg",
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485049_0.jpg",
-        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485050_0.jpg"
+        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485050_0.jpg",
+        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485051_0.jpg",
+        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485052_0.jpg",
+        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485053_0.jpg",
+        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485054_0.jpg"
       ],
       
       music_url: "wabaniversary/นบหนง.mp3", 
@@ -219,6 +229,7 @@
     // 🧠 Logic Starts Here
     // ==========================================
     let state = { page: 1, q: 1, hearts: 0, musicPlaying: false, envelopeOpen: false, pleadCount: 0 };
+    let timerInterval = null; // ตัวแปรสำหรับจับเวลา
     const app = document.getElementById('app');
 
     // Init Logic
@@ -230,18 +241,20 @@
       }
       
       if(state.page === 2 && state.q === 2) setupRunawayBtn();
-      if(state.page === 5) startSlideshow();
-      if(state.page === 10) setTimeout(initScratch, 50); // Init canvas when page 10 loads
+      // Page 5 now handles its own static layout, no slideshow interval needed
+      if(state.page === 9) startTimer(); // เริ่มจับเวลาเมื่อเข้าหน้า 9
+      if(state.page === 10) setTimeout(initScratch, 50);
     }
 
     function goTo(page) { 
+      if(timerInterval) clearInterval(timerInterval); // หยุดเวลาก่อนเปลี่ยนหน้า
       state.page = page; 
       render(); 
       playSound('pop');
     }
 
     // --- Sound ---
-    let audioCtx = null;
+let audioCtx = null;
 
 function getAudioCtx() {
   if (!audioCtx) {
@@ -251,7 +264,7 @@ function getAudioCtx() {
   return audioCtx;
 }
 
-    function playSound(type) {
+function playSound(type) {
   const ctx = getAudioCtx();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
@@ -300,7 +313,7 @@ function getAudioCtx() {
 
     // --- Pages ---
 
-    // 1. Lock Screen
+    // 1. Lock Screen (กลับไปใช้ข้อความเรียบง่าย)
     function PageLock() {
       return `
         <div class="w-full h-full flex flex-col items-center justify-center bg-[#fff9fb] relative overflow-hidden">
@@ -310,7 +323,7 @@ function getAudioCtx() {
           <div class="z-10 text-center w-full max-w-xs p-6">
             <img src="${assets.lock}" class="w-24 h-24 mx-auto mb-6 float-soft drop-shadow-sm">
             <h1 class="text-xl font-bold text-k-text mb-2">Anniversary Day</h1>
-            <p class="text-sm text-gray-400 mb-6">ใส่รหัสวันสำคัญของเรา</p>
+            <p class="text-sm text-gray-400 mb-6">ใส่รหัสวันสำคัญของเรา (Hint: 0102)</p>
             
             <input id="pass-input" type="password" readonly class="w-full h-14 rounded-2xl text-center text-2xl tracking-[0.5em] input-box mb-6 focus:outline-none" placeholder="••••">
             
@@ -327,22 +340,82 @@ function getAudioCtx() {
       `;
     }
 
-    // 9. Success Page
+    // 9. Success Page (ปรับปรุงใหม่: สีชมพู + เวลานับถอยหลัง)
     function PageSuccess() {
       setTimeout(() => { for(let i=0; i<15; i++) setTimeout(spawnConfetti, i*150); }, 100);
       return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-[#f0fdf4] relative overflow-hidden">
+        <div class="w-full h-full flex flex-col items-center justify-center bg-pink-50 relative overflow-hidden">
            <div class="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/confetti.png')]"></div>
-           <div class="z-10 text-center p-6 bounce-in">
-             <div class="text-7xl mb-4">🎉</div>
-             <h1 class="text-3xl font-bold text-green-600 mb-2">ถูกต้องนะค้าบ!</h1>
-             <p class="text-gray-500 mb-8">เก่งมาก! ไอวาวเก่งที่ฉู้ดด ❤️</p>
-             <button onclick="goTo(7)" class="px-8 py-3 bg-green-500 text-white rounded-full font-bold shadow-lg hover:scale-105 transition transform flex items-center gap-2 mx-auto">
+           
+           <div class="z-10 text-center p-6 bounce-in w-full max-w-sm">
+             <div class="text-6xl mb-4">🎉</div>
+             <h1 class="text-3xl font-bold text-pink-500 mb-2 drop-shadow-sm">Happy Anniversary!</h1>
+             <p class="text-gray-500 mb-6">เราอยู่ด้วยกันมานานขนาดนี้แล้วนะ ❤️</p>
+             
+             <!-- Timer Container -->
+             <div id="timer-display" class="mb-8 p-4 bg-white/50 backdrop-blur-sm rounded-2xl border border-pink-100">
+                <p class="text-gray-400 text-sm animate-pulse">กำลังคำนวณเวลา...</p>
+             </div>
+
+             <button onclick="goTo(7)" class="px-8 py-3 bg-pink-500 text-white rounded-full font-bold shadow-lg hover:scale-105 transition transform flex items-center gap-2 mx-auto animate-bounce">
                <span>ไปดูต่อเลย...</span> 🚀
              </button>
            </div>
         </div>
       `;
+    }
+
+    // ฟังก์ชันจับเวลา (Real-time Timer)
+    function startTimer() {
+        if(timerInterval) clearInterval(timerInterval);
+        
+        const update = () => {
+            const start = new Date(config.start_date);
+            const now = new Date();
+            let diff = now - start;
+
+            // คำนวณเวลา
+            const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            diff -= years * (1000 * 60 * 60 * 24 * 365.25);
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            diff -= days * (1000 * 60 * 60 * 24);
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            diff -= hours * (1000 * 60 * 60);
+
+            const minutes = Math.floor(diff / (1000 * 60));
+            diff -= minutes * (1000 * 60);
+
+            const seconds = Math.floor(diff / 1000);
+
+            // แสดงผล
+            const el = document.getElementById('timer-display');
+            if(el) {
+                el.innerHTML = `
+                   <div class="flex flex-wrap justify-center gap-2">
+                      ${createTimeBox(years, 'ปี')}
+                      ${createTimeBox(days, 'วัน')}
+                      ${createTimeBox(hours, 'ชั่วโมง')}
+                      ${createTimeBox(minutes, 'นาที')}
+                      ${createTimeBox(seconds, 'วินาที')}
+                   </div>
+                `;
+            }
+        }
+        
+        update(); // รันครั้งแรกทันที
+        timerInterval = setInterval(update, 1000); // รันทุก 1 วินาที
+    }
+    
+    // สร้างกล่องเวลาสวยๆ
+    function createTimeBox(num, label) {
+        return `
+            <div class="bg-white p-2 rounded-xl shadow-sm border border-pink-100 min-w-[60px] flex flex-col items-center">
+                <div class="text-xl font-bold text-pink-500">${num}</div>
+                <div class="text-[10px] text-gray-400">${label}</div>
+            </div>
+        `;
     }
 
     // 7. Plead Page
@@ -353,7 +426,7 @@ function getAudioCtx() {
            
            <div class="z-10 text-center w-full max-w-sm bg-white/80 backdrop-blur p-6 rounded-3xl shadow-sm border border-pink-100">
              <div class="text-6xl mb-4 sad-animate">🥺</div>
-             <h1 class="text-2xl font-bold mb-3 text-k-text">ก่อนอื่น เค้าขอโทษนะ...</h1>
+             <h1 class="text-2xl font-bold mb-3 text-k-text">เค้าขอโทษ...</h1>
              <p class="text-gray-600 mb-4 leading-relaxed text-sm">
                  เค้าลืมทำเซอร์ไพรส์วันครบรอบ...<br>ไม่ได้ตั้งใจจริงๆ นะ<br>ยกโทษให้เค้าเถอะนะคนดี
              </p>
@@ -397,8 +470,8 @@ function getAudioCtx() {
       const q = state.q === 1 ? config.q1 : config.q2;
       
       // เลือกรูปมาแสดงตามข้อ (ดึงจาก gallery_images)
-      const img1 = state.q === 1 ? config.gallery_images[0] : config.gallery_images[2];
-      const img2 = state.q === 1 ? config.gallery_images[1] : config.gallery_images[3];
+      const img1 = state.q === 1 ? config.gallery_images[6] : config.gallery_images[8];
+      const img2 = state.q === 1 ? config.gallery_images[7] : config.gallery_images[9];
 
       return `
         <div class="w-full h-full flex flex-col items-center justify-center bg-white relative overflow-hidden">
@@ -593,34 +666,61 @@ function getAudioCtx() {
       `;
     }
 
-    // 5. Gallery Page
+    // 5. Gallery Page (REVISED: Grid Layout + Cute Style)
     function PageGallery() {
       const time = calcTime();
+      
+      // Generate Polaroid Grid from all gallery images
+      const photosHtml = config.gallery_images.map((img, i) => {
+          const rot = (Math.random() * 6 - 3).toFixed(1); // Random rotation -3 to 3 deg
+          const delay = i * 0.1; // Staggered animation
+          return `
+            <div class="break-inside-avoid mb-4" style="animation: fadeInUp 0.8s ease backwards ${delay}s;">
+                <div class="bg-white p-2 shadow-md rounded-lg transform rotate-[${rot}deg] hover:rotate-0 transition duration-300 border border-gray-100">
+                    <div class="relative overflow-hidden rounded-md aspect-[3/4]">
+                        <img src="${img}" class="object-cover w-full h-full" loading="lazy">
+                    </div>
+                </div>
+            </div>
+          `;
+      }).join('');
+
       return `
-        <div class="w-full h-full bg-[#fffcf4] overflow-y-auto pb-10">
-           <!-- Header -->
-           <div class="pt-10 pb-6 text-center">
-             <h1 class="text-2xl font-bold text-k-text">Our Memories ☁️</h1>
-             <p class="text-sm text-gray-400 mt-1">${time}</p>
-           </div>
-
-           <!-- Polaroid Slide -->
-           <div class="relative w-64 h-80 mx-auto bg-white p-3 shadow-xl transform -rotate-2 mb-10 transition-transform hover:rotate-0 duration-500">
-              <div class="w-full h-64 bg-gray-100 overflow-hidden relative">
-                ${config.gallery_images.map((url, i) => `<img src="${url}" class="slide-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${i===0?'opacity-100':'opacity-0'}">`).join('')}
-              </div>
-              <div class="text-center pt-3 font-handwriting text-gray-500 text-sm">Forever & Always</div>
-           </div>
+        <div class="w-full h-full bg-[#fffcf4] overflow-y-auto overflow-x-hidden relative">
+           <!-- Decor Background (Polka Dots) -->
+           <div class="fixed inset-0 pointer-events-none opacity-30" style="background-image: radial-gradient(#ffccd5 1.5px, transparent 1.5px); background-size: 20px 20px;"></div>
            
-           <!-- Message Box -->
-           <div class="mx-6 p-6 bg-white rounded-2xl shadow-sm border border-pink-100 text-center relative overflow-hidden">
-              <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-200 to-yellow-100"></div>
-              <p class="text-k-text leading-loose font-medium">${config.final_msg}</p>
-              <div class="mt-4 text-xs text-gray-400">By ${config.partner_name}</div>
-           </div>
+           <div class="relative z-10 px-4 py-8 pb-24">
+               <!-- Header -->
+               <div class="text-center mb-8">
+                 <h1 class="text-3xl font-bold text-pink-500 mb-2 drop-shadow-sm">Happy Anniversary 🎉</h1>
+                 <div class="inline-block bg-white/80 backdrop-blur px-4 py-2 rounded-full border border-pink-200 shadow-sm">
+                    <p class="text-sm text-gray-500 font-medium">${time}</p>
+                 </div>
+               </div>
 
-           <div class="mt-10 text-center">
-             <button onclick="goTo(1); state.q=1; state.envelopeOpen=false; state.pleadCount=0;" class="text-gray-300 text-sm underline">Play Again</button>
+               <!-- Photo Grid (Masonry using CSS columns) -->
+               <div class="columns-2 gap-4 space-y-4">
+                  ${photosHtml}
+               </div>
+               
+               <!-- Final Message Box -->
+               <div class="mt-12 mx-2 p-6 bg-white/90 backdrop-blur rounded-3xl shadow-lg border-2 border-pink-100 text-center relative overflow-hidden">
+                  <!-- Decor blobs -->
+                  <div class="absolute -top-6 -left-6 w-16 h-16 bg-yellow-100 rounded-full blur-xl opacity-60"></div>
+                  <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-pink-100 rounded-full blur-xl opacity-60"></div>
+                  
+                  <div class="text-4xl mb-4 animate-bounce">💖</div>
+                  <p class="text-k-text leading-loose font-medium text-lg">${config.final_msg}</p>
+                  <div class="mt-4 text-xs text-gray-400 tracking-widest uppercase">- ${config.partner_name} -</div>
+               </div>
+
+               <!-- Replay Button -->
+               <div class="mt-12 text-center pb-8">
+                 <button onclick="goTo(1); state.q=1; state.envelopeOpen=false; state.pleadCount=0;" class="px-6 py-3 bg-white border border-pink-200 text-pink-400 rounded-full text-sm shadow-sm hover:bg-pink-50 transition transform hover:scale-105">
+                    🔄 เล่นอีกรอบ (Replay)
+                 </button>
+               </div>
            </div>
         </div>
       `;
@@ -735,16 +835,7 @@ function getAudioCtx() {
       }, 800);
     }
 
-    // Slideshow
-    function startSlideshow() {
-      const imgs = document.querySelectorAll('.slide-img');
-      let idx = 0;
-      setInterval(() => {
-        imgs.forEach(img => img.classList.replace('opacity-100', 'opacity-0'));
-        idx = (idx + 1) % imgs.length;
-        imgs[idx].classList.replace('opacity-0', 'opacity-100');
-      }, 3000);
-    }
+    // No slideshow needed in Page 5 anymore as it's static grid
 
     // Time Calc
     function calcTime() {
@@ -795,4 +886,3 @@ function getAudioCtx() {
   </script>
 </body>
 </html>
-
