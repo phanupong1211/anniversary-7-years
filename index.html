@@ -3,420 +3,671 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Interactive Anniversary Game</title>
+  <title>Our Anniversary ❤️</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@300;400;500;600;700&family=Itim&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'k-pink': '#ffe4e9', // ชมพูพาสเทลเกาหลี
+            'k-cream': '#fffcf4', // ครีมนวลๆ
+            'k-text': '#5a4a4e',  // สีน้ำตาลเทาๆ 
+            'k-accent': '#ffb7c5' // ชมพูเข้มขึ้นนิดนึง
+          },
+          fontFamily: {
+            sans: ['Mali', 'cursive'],
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    /* Mobile-first base styles */
     body {
-      box-sizing: border-box;
       font-family: 'Mali', cursive;
       overflow: hidden;
       user-select: none;
-      -webkit-tap-highlight-color: transparent; /* Remove highlight on tap */
+      -webkit-tap-highlight-color: transparent;
+      background-color: #fff9fb; /* พื้นหลังสีขาวอมชมพู */
     }
-    
-    h1, h2, .text-xl, .text-2xl, .text-3xl, .text-4xl { font-weight: 600; }
-    
-    /* Better button interaction on touch devices */
-    .game-button {
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Animation: ลอยๆ ดุ๊กดิ๊ก */
+    @keyframes float-soft {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+    .float-soft { animation: float-soft 4s ease-in-out infinite; }
+
+    /* Button Style: สไตล์มินิมอล */
+    .btn-minimal {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
-      font-family: 'Mali', cursive;
       touch-action: manipulation;
+      border: 2px solid transparent;
     }
-    .game-button:active { transform: scale(0.95); }
+    .btn-minimal:active { transform: scale(0.95); }
+    .btn-shadow {
+      box-shadow: 0 4px 14px 0 rgba(255, 182, 193, 0.3);
+    }
     
-    /* Keyframes remain same */
-    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
-    .shake { animation: shake 0.4s ease; }
-    
-    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-    .bounce { animation: bounce 0.6s ease; }
-    
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    .fade-in { animation: fadeIn 0.5s ease forwards; }
-    
-    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-    .float { animation: float 3s ease-in-out infinite; }
-    
-    @keyframes jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-    .jump-animate { animation: jump 0.8s infinite ease-in-out; }
+    /* Input Box */
+    .input-box {
+      background: white;
+      border: 2px solid #ffe4e9;
+      color: #ff8fa3;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+    }
 
-    @keyframes popIn { 0% { transform: scale(0) rotate(-10deg); opacity: 0; } 80% { transform: scale(1.1) rotate(5deg); opacity: 1; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
-    .pop-in { animation: popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; }
-
-    @keyframes stamp { 0% { transform: scale(2) rotate(20deg); opacity: 0; } 100% { transform: scale(1) rotate(-5deg); opacity: 1; } }
-    .stamp-animate { animation: stamp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-
-    @keyframes sadShake { 0% { transform: rotate(0deg); } 25% { transform: rotate(3deg); } 50% { transform: rotate(0deg); } 75% { transform: rotate(-3deg); } 100% { transform: rotate(0deg); } }
-    .sad-animate { animation: sadShake 2s infinite ease-in-out; }
-
-    /* Music Button - Optimized position for mobile */
+    /* Music Button */
     .music-btn {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      z-index: 1000;
-      width: 40px;
-      height: 40px;
+      position: fixed; top: 20px; right: 20px; z-index: 50;
+      width: 44px; height: 44px;
       border-radius: 50%;
       background: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 18px;
-      transition: all 0.3s ease;
-      border: 2px solid #ff1493;
-      color: #ff1493;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: 2px solid #ffe4e9;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
     }
-    .music-btn.playing { background: #ff1493; color: white; animation: pulse-border 2s infinite; }
-    @keyframes pulse-border { 0% { box-shadow: 0 0 0 0 rgba(255, 20, 147, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(255, 20, 147, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 20, 147, 0); } }
-    
-    /* Envelope Styles - Scaled for mobile */
+    .music-btn.playing {
+      background: #ffb7c5;
+      border-color: #ffb7c5;
+      animation: spin-slow 8s linear infinite;
+    }
+    @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+
+    /* Envelope - ปรับให้รองรับรูปภาพ */
     .envelope-container { perspective: 1000px; width: 100%; display: flex; justify-content: center; }
     .envelope {
-      position: relative;
-      width: 260px; /* Slightly smaller for narrow screens */
-      height: 170px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      z-index: 10;
+      position: relative; width: 280px; height: 260px; /* ปรับความสูงให้พอดีกับรูป */
+      cursor: pointer; transition: transform 0.3s ease; z-index: 10;
     }
-    .envelope:hover { transform: scale(1.02); }
-    .envelope-body {
-        position: absolute; bottom: 0; width: 100%; height: 100%;
-        background-color: #ffffff; border: 2px solid #ffb6d9; border-radius: 0 0 10px 10px;
-        box-shadow: 0 8px 25px rgba(255, 20, 147, 0.15); z-index: 20; overflow: hidden;
-    }
-    .envelope-flap {
-      position: absolute; top: 0; left: 0; width: 100%; height: 90px;
-      background: linear-gradient(135deg, #ff1493 0%, #ffb6d9 100%);
-      clip-path: polygon(0 0, 50% 100%, 100% 0); transform-origin: top;
-      transition: transform 0.6s ease 0.2s, z-index 0.2s; z-index: 30;
-    }
-    .envelope.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+    /* ซ่อน CSS เดิมที่ไม่ใช้แล้ว */
+    .envelope-body, .envelope-flap { display: none; }
+    
+    /* Paper Texture */
     .letter-paper {
-      position: absolute; top: 10px; left: 10px; right: 10px; height: 150px;
-      background-color: #fffef8; border-radius: 4px; padding: 12px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: all 0.8s ease 0.4s;
-      opacity: 0; transform: translateY(40px) scale(0.9); z-index: 15; overflow-y: auto;
-      font-family: 'Mali', cursive; font-size: 0.9rem;
+      position: absolute; top: 20px; left: 20px; right: 20px; height: 180px;
+      background-image: linear-gradient(#fdfbf7 2px, transparent 2px), linear-gradient(90deg, #fdfbf7 2px, transparent 2px), linear-gradient(rgba(255,255,255,.3) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.3) 1px, transparent 1px);
+      background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+      background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+      background-color: #fffef8;
+      border-radius: 8px; padding: 20px;
+      transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      opacity: 0; transform: translateY(20px) scale(0.8); z-index: 15; overflow-y: auto;
+      font-size: 0.95rem; color: #5a4a4e;
+      line-height: 1.8;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
+    
+    /* ตอนเปิดซอง - กระดาษเลื่อนขึ้นมาข้างหน้า */
     .envelope.open .letter-paper {
-      opacity: 1; transform: translateY(-80px) scale(1.05); z-index: 40;
-      height: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      opacity: 1; 
+      transform: translateY(-80px) scale(1.1); /* เลื่อนขึ้นและขยาย */
+      z-index: 40; /* อยู่หน้าซอง */
+      height: 340px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border: 2px solid #fff;
     }
-    
-    /* Rain & Pop */
-    .heart-rain { position: fixed; top: -50px; animation: fall 4s linear forwards; pointer-events: none; z-index: 9999; }
-    @keyframes fall { to { top: 110vh; transform: translateX(20px) rotate(360deg); } }
-    .pop-heart { position: absolute; animation: popUp 0.8s ease-out forwards; pointer-events: none; z-index: 9998; font-size: 20px; }
-    @keyframes popUp { 0% { transform: scale(0) translateY(0); opacity: 1; } 100% { transform: scale(1.5) translateY(-40px); opacity: 0; } }
 
-    /* Photo Frame */
-    .photo-frame {
-      border: 6px solid white;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      transform: rotate(-3deg); transition: transform 0.3s;
-      overflow: hidden; background: white; position: relative;
-    }
-    .slide-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out; }
-    .slide-img.active { opacity: 1; }
-    
-    /* Approve Button */
-    .approve-btn-container:hover .approve-stamp { transform: scale(1.1) rotate(0deg); }
-
-    /* Mini Decorative Photos - Optimized for mobile */
-    .mini-photo {
-        position: absolute; transition: all 0.3s ease; opacity: 0.6; z-index: 0; pointer-events: none;
-    }
-    /* Hide some photos on small screens to prevent clutter */
-    @media (max-width: 640px) {
-        .mini-photo.mobile-hide { display: none; }
-        .mini-photo { opacity: 0.4; }
-    }
-    
-    /* Frame Styles */
-    .frame-polaroid { padding: 4px 4px 12px 4px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .frame-circle { border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden; }
-
-    /* Numpad Styles - Mobile Optimized */
-    .numpad-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-      width: 100%; max-width: 260px; margin: 0 auto;
-    }
+    /* Numpad Cute */
     .num-btn {
-      background: white; border: 2px solid #ffb6d9; color: #ff1493;
-      font-size: 1.4rem; font-weight: bold; border-radius: 50%; aspect-ratio: 1;
+      background: white;
+      color: #ff8fa3;
+      font-size: 1.5rem;
+      border-radius: 50%;
+      aspect-ratio: 1;
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.1s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 4px 10px rgba(239, 239, 239, 0.5);
+      transition: all 0.2s;
     }
-    .num-btn:active { background: #ffb6d9; color: white; transform: scale(0.9); }
+    .num-btn:active { background: #ffe4e9; transform: scale(0.9); }
+
+    /* Utility */
+    .shake { animation: shake 0.4s ease; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    .pop-heart { position: absolute; animation: popUp 0.8s ease-out forwards; pointer-events: none; z-index: 9998; font-size: 24px; }
+    @keyframes popUp { 0% { transform: scale(0) translateY(0); opacity: 1; } 100% { transform: scale(1.5) translateY(-50px); opacity: 0; } }
+    
+    .sad-animate { animation: sadShake 2s infinite ease-in-out; }
+    @keyframes sadShake { 0% { transform: rotate(0deg); } 25% { transform: rotate(5deg); } 50% { transform: rotate(0deg); } 75% { transform: rotate(-5deg); } 100% { transform: rotate(0deg); } }
+
+    .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+    @keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 50% { transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); opacity: 1; } }
+
+    /* Scratch Card Canvas */
+    #scratch-canvas {
+        touch-action: none; /* Prevent scroll while scratching */
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="%23ff69b4" opacity="0.5"/></svg>') 12 12, auto;
+    }
   </style>
 </head>
-<body class="h-full w-full bg-pink-50">
+<body class="h-full w-full">
   
-  <audio id="bg-music" loop>
+  <!-- Audio: Added autoplay -->
+  <audio id="bg-music" loop autoplay>
     <source src="" type="audio/mpeg"> 
   </audio>
   
+  <!-- Music Control Icon -->
   <div id="music-control" class="music-btn" onclick="toggleMusic()">
-    🔇
+    <img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" class="w-5 h-5 opacity-50" alt="Music">
   </div>
 
   <div id="app" class="w-full h-full relative"></div>
 
-  <!-- Success Modal Container -->
-  <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm hidden px-4">
-    <div class="bg-white p-6 rounded-3xl shadow-2xl text-center w-full max-w-xs relative transform scale-0 opacity-0" id="modal-content">
-        <div class="absolute -top-10 left-1/2 transform -translate-x-1/2">
-            <img src="https://cdn-icons-png.flaticon.com/512/4710/4710962.png" alt="Celebration" class="w-20 h-20 drop-shadow-lg animate-bounce">
-        </div>
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold text-pink-500 mb-2">ถูกต้องนะคร้าบ! 🎉</h2>
-            <p class="text-gray-600 mb-4 text-sm">เก่งมาก! ไปดูอะไรหน่อยสิ...</p>
-            <div class="flex justify-center space-x-2 text-xl">
-                <span class="animate-pulse">💖</span>
-                <span class="animate-pulse delay-75">✨</span>
-                <span class="animate-pulse delay-150">🐻</span>
-            </div>
-        </div>
-    </div>
-  </div>
-
+  <!-- Script -->
   <script>
     // ==========================================
-    // ⚙️ CONFIGURATION
+    // ⚙️ ตั้งค่า (แก้ไขตรงนี้)
     // ==========================================
-    const defaultConfig = {
-      secret_code: "0102",
-      partner_name: "วาว",
-      start_date: "2019-02-01",
+    const config = {
+      secret_code: "0102", // รหัสผ่าน
+      partner_name: "คิว", 
+      start_date: "2019-02-01", // วันครบรอบ YYYY-MM-DD
       
+      // รูป Gallery (เปลี่ยน URL ได้เลย)
       gallery_images: [
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485045_0.jpg",
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485046_0.jpg",
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485047_0.jpg",
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485048_0.jpg",
-        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485049_0.jpg"
+        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485049_0.jpg",
+        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485050_0.jpg"
       ],
       
-      approve_img: "https://cdn-icons-png.flaticon.com/512/9463/9463321.png", 
       music_url: "wabaniversary/นบหนง.mp3", 
 
-      question_1: "ใครน่ารักที่สุดในโลก?",
-      answer_1a: "แมวข้างบ้าน",
-      answer_1b: "แฟนเค้าเอง (คิวไง)",
-      
-      question_2: "รักเค้าไหม?",
-      answer_2a: "ไม่รัก (เชอะ)", 
-      answer_2b: "รักที่สุดในจักรวาล",
+      // ข้อความคำถาม
+      q1: { text: "ใครน่ารักที่สุดในโลก?", a: "แมวข้างบ้าน 🐱", b: "แฟนเค้าเอง (คิวไง) 🐻" },
+      q2: { text: "รักเค้าไหม?", a: "ไม่รัก (เชอะ)", b: "รักที่สุดในจักรวาล 🚀" },
 
-      surprise_title: "เย้! รู้ใจที่สุด 🎉",
-      surprise_message: "ถึงจะกวนไปบ้าง แต่ก็รักวาวคนเดียวนะ ขอบคุณที่อยู่กันมาได้ถึงตอนนี้ 555+",
+      // ข้อความเซอร์ไพรส์ (หน้ารับดอกไม้)
+      surprise: {
+        title: "ดอกไม้สำหรับคนน่ารัก 💐",
+        msg: "ขอบคุณที่อยู่ด้วยกันมานะ ถึงจะดื้อไปบ้างแต่ก็รักวาวคนเดียวคับ"
+      },
       
-      letter_content: "ถึง ไอ้วาวตัวอ้วน... <br><br>ไม่อยากจะเชื่อเลยว่าเวลาผ่านไปเร็วขนาดนี้ ทุกวันที่ตื่นมาเจอวาวคือวันที่ดีที่สุดของเค้านะ ขอบคุณที่อดทนและเข้าใจกันเสมอมานะ <br><br>สัญญาว่าจะรักและดูแลวาวให้ดีที่สุดตลอดไป ❤️",
-      final_message: "รักนะ ไอ้อ้วน! 😜💕",
-      
-      background_color: "#fff0f5",
-      primary_action_color: "#ff1493",
-      text_color: "#7d1f5e"
+      // จดหมาย
+      letter: "ถึง วาว... <br><br>ไม่อยากจะเชื่อเลยว่าเวลาผ่านไปเร็วขนาดนี้ ทุกวันที่ตื่นมาเจอวาวคือวันที่ดีที่สุดของเค้านะ ขอบคุณที่อดทนและเข้าใจกันเสมอมานะ <br><br>สัญญาว่าจะรักและดูแลวาวให้ดีที่สุดตลอดไป ❤️",
+      final_msg: "รักนะ ไอ้วาวอ้วน! 😜💕"
     };
 
     // ==========================================
-    // 🔊 SOUND & LOGIC
+    // 🎨 Assets (ไอคอนน่ารักๆ)
     // ==========================================
-    const sfx = {
-      ctx: null,
-      init: function() {
-        if (!this.ctx) { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
-      },
-      playTone: function(freq, type, duration, vol = 0.1) {
-        if (!this.ctx) this.init();
-        if (this.ctx.state === 'suspended') this.ctx.resume();
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + duration);
-      },
-      click: function() { this.playTone(600, 'sine', 0.1, 0.05); },
-      success: function() { 
-        this.playTone(523.25, 'triangle', 0.1, 0.1); 
-        setTimeout(() => this.playTone(659.25, 'triangle', 0.1, 0.1), 100); 
-        setTimeout(() => this.playTone(783.99, 'triangle', 0.2, 0.1), 200); 
-      },
-      error: function() { 
-        this.playTone(200, 'sawtooth', 0.2, 0.1); 
-        setTimeout(() => this.playTone(150, 'sawtooth', 0.2, 0.1), 150); 
-      },
-      pop: function() { this.playTone(800, 'sine', 0.05, 0.05); }
+    const assets = {
+      lock: "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/888%20(2).png", // แม่กุญแจ
+      key: "https://cdn-icons-png.flaticon.com/512/1000/1000997.png", // ลูกกุญแจ
+      heart: "https://cdn-icons-png.flaticon.com/512/2589/2589175.png", // หัวใจพาสเทล
+      gift: "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/pngegg.png", // กล่องของขวัญ
+      bear: "https://cdn-icons-png.flaticon.com/512/2362/2362624.png", // หมี
+      cat: "https://cdn-icons-png.flaticon.com/512/1864/1864514.png", // แมวร้องไห้
+      cry_bear: "https://cdn-icons-png.flaticon.com/512/2362/2362624.png", // หมีร้องไห้
+      happy: "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/pngegg%20bear.png", // ฉลอง
+      stamp: "https://cdn-icons-png.flaticon.com/512/12353/12353723.png", // ตราประทับ
+      bouquet: "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/%E2%80%94Pngtree%E2%80%94hand%20drawn%20vintage%20nordic%20watercolor_5776041.png", // ช่อดอกไม้
+      envelope_bg: "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/%E2%80%94Pngtree%E2%80%94valentines%20day%20small%20illustration%20pink_3880971.png" // ซองจดหมาย (New!)
     };
 
-    let currentPage = 1;
-    let currentQuestion = 1;
-    let hearts = 0;
-    let envelopeOpen = false;
-    let isMusicPlaying = false;
-    let pleadCount = 0; 
-    let slideshowInterval = null;
+    // ==========================================
+    // 🧠 Logic Starts Here
+    // ==========================================
+    let state = { page: 1, q: 1, hearts: 0, musicPlaying: false, envelopeOpen: false, pleadCount: 0 };
+    const app = document.getElementById('app');
 
-    document.addEventListener('click', (e) => {
-      if(!sfx.ctx) sfx.init();
-      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('.music-btn') || e.target.closest('#success-modal') || e.target.closest('.mini-photo')) return;
-      sfx.pop();
-      const heart = document.createElement('div');
-      heart.className = 'pop-heart';
-      heart.innerText = ['❤️', '💕', '✨', '💖', '😜'][Math.floor(Math.random() * 5)];
-      heart.style.left = e.clientX + 'px';
-      heart.style.top = e.clientY + 'px';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 800);
-    });
+    // Init Logic
+    function render() {
+      // Pages: 7 = Plead (ขอโทษ), 8 = Forgive (ขอบคุณ), 9 = Success (ยินดี), 10 = Scratch (ขูดบัตร)
+      const pages = [null, PageLock, PageQuiz, PageGift, PageLetter, PageGallery, PageWrong, PagePlead, PageForgive, PageSuccess, PageScratch];
+      if (pages[state.page]) {
+         app.innerHTML = pages[state.page]();
+      }
+      
+      if(state.page === 2 && state.q === 2) setupRunawayBtn();
+      if(state.page === 5) startSlideshow();
+      if(state.page === 10) setTimeout(initScratch, 50); // Init canvas when page 10 loads
+    }
 
-    function setupRunawayEffect() {
-      const btn = document.getElementById('answer-2a');
-      if (!btn) return;
-      const texts = ["แน่ใจหรอ?", "คิดดีๆนะ", "มือลั่น?", "กดไม่ได้หรอก 😜", "จะไปไหน", "กลับไปกดรักเลย!", "ฮั่นแน่!"];
-      const moveBtn = (e) => {
-         if(e.type === 'touchstart') e.preventDefault(); // Stop default touch
-         sfx.click();
-         const parent = btn.parentElement;
-         const containerRect = parent.getBoundingClientRect();
-         const btnRect = btn.getBoundingClientRect();
-         
-         const maxX = containerRect.width - btnRect.width;
-         const maxY = containerRect.height - btnRect.height;
-         
-         // Constrain movement to be visible within container
-         const newX = Math.max(0, Math.min(maxX, Math.random() * maxX)) - (maxX / 2); 
-         const newY = Math.max(0, Math.min(maxY, Math.random() * maxY)) - (maxY / 2);
-         
-         btn.style.transform = `translate(${newX}px, ${newY}px)`;
-         btn.style.transition = "all 0.2s ease";
-         btn.innerText = texts[Math.floor(Math.random() * texts.length)];
-         btn.style.backgroundColor = "#fee2e2";
-         btn.style.borderColor = "#ef4444";
-      };
-      btn.addEventListener('mouseover', moveBtn);
-      btn.addEventListener('touchstart', moveBtn);
-      btn.onclick = (e) => {
-        e.preventDefault();
-        sfx.error();
-        alert("ไม่อนุญาตให้ไม่รัก! ไปกดปุ่ม 'รัก' เดี๋ยวนี้! 😡💘");
+    function goTo(page) { 
+      state.page = page; 
+      render(); 
+      playSound('pop');
+    }
+
+    // --- Sound ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      
+      const now = audioCtx.currentTime;
+      if (type === 'pop') {
+        osc.frequency.setValueAtTime(800, now);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
+      } else if (type === 'error') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, now);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
+      } else if (type === 'success') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.linearRampToValueAtTime(800, now + 0.2);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+        osc.start(now); osc.stop(now + 0.5);
       }
     }
 
     function toggleMusic() {
-      if(!sfx.ctx) sfx.init();
       const audio = document.getElementById('bg-music');
       const btn = document.getElementById('music-control');
-      if (defaultConfig.music_url && !audio.src) audio.src = defaultConfig.music_url;
-      if (isMusicPlaying) {
-        audio.pause();
-        btn.innerHTML = '🔇';
-        btn.classList.remove('playing');
+      if (!audio.src || audio.src === window.location.href) audio.src = config.music_url;
+      
+      if (state.musicPlaying) {
+        audio.pause(); btn.classList.remove('playing');
+        btn.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" class="w-5 h-5 opacity-50">`;
       } else {
-        audio.play().then(() => {
-          btn.innerHTML = '🎵';
-          btn.classList.add('playing');
-        }).catch(e => { console.log("Audio play blocked"); });
+        audio.play().catch(e => console.log("Must interact first"));
+        btn.classList.add('playing');
+        btn.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" class="w-5 h-5 text-pink-500">`;
       }
-      isMusicPlaying = !isMusicPlaying;
+      state.musicPlaying = !state.musicPlaying;
     }
 
-    function createHeartRain() {
-      const heart = document.createElement('div');
-      heart.className = 'heart-rain';
-      heart.textContent = ['💕', '💖', '💗', '💝', '🫶'][Math.floor(Math.random() * 5)];
-      heart.style.left = Math.random() * 100 + '%';
-      heart.style.fontSize = (Math.random() * 15 + 15) + 'px'; // Smaller for mobile
-      heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 5000);
+    // --- Click Effect ---
+    document.addEventListener('click', (e) => {
+      if(e.target.closest('button') || e.target.closest('input')) return;
+      const el = document.createElement('div');
+      el.className = 'pop-heart';
+      el.innerHTML = ['🌸', '✨', '☁️', '🤍'][Math.floor(Math.random()*4)];
+      el.style.left = e.clientX + 'px'; el.style.top = e.clientY + 'px';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 800);
+    });
+
+    // --- Pages ---
+
+    // 1. Lock Screen
+    function PageLock() {
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#fff9fb] relative overflow-hidden">
+          <div class="absolute -top-10 -left-10 w-40 h-40 bg-[#ffe4e9] rounded-full blur-3xl opacity-50"></div>
+          <div class="absolute bottom-10 -right-10 w-52 h-52 bg-[#e8f4f8] rounded-full blur-3xl opacity-50"></div>
+          
+          <div class="z-10 text-center w-full max-w-xs p-6">
+            <img src="${assets.lock}" class="w-24 h-24 mx-auto mb-6 float-soft drop-shadow-sm">
+            <h1 class="text-xl font-bold text-k-text mb-2">Anniversary Day</h1>
+            <p class="text-sm text-gray-400 mb-6">ใส่รหัสวันสำคัญของเรา</p>
+            
+            <input id="pass-input" type="password" readonly class="w-full h-14 rounded-2xl text-center text-2xl tracking-[0.5em] input-box mb-6 focus:outline-none" placeholder="••••">
+            
+            <div class="grid grid-cols-3 gap-4 px-4 mb-6">
+              ${[1,2,3,4,5,6,7,8,9].map(n => `<div onclick="typeCode('${n}')" class="num-btn">${n}</div>`).join('')}
+              <div onclick="clearCode()" class="num-btn text-sm text-gray-400">C</div>
+              <div onclick="typeCode('0')" class="num-btn">0</div>
+              <div onclick="delCode()" class="num-btn text-sm text-gray-400">⌫</div>
+            </div>
+            
+            <button onclick="checkCode()" class="w-full py-3.5 bg-k-accent text-white rounded-2xl font-bold shadow-sm btn-minimal hover:bg-pink-300">Unlock ❤️</button>
+          </div>
+        </div>
+      `;
     }
 
-    function calculateTimeTogether(startDate) {
-      const start = new Date(startDate);
-      const now = new Date();
-      const diff = now - start;
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const years = Math.floor(days / 365);
-      const remainingDays = days % 365;
-      const months = Math.floor(remainingDays / 30);
-      const finalDays = remainingDays % 30;
-      return { years, months, days: finalDays, totalDays: days };
+    // 9. Success Page
+    function PageSuccess() {
+      setTimeout(() => { for(let i=0; i<15; i++) setTimeout(spawnConfetti, i*150); }, 100);
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#f0fdf4] relative overflow-hidden">
+           <div class="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/confetti.png')]"></div>
+           <div class="z-10 text-center p-6 bounce-in">
+             <div class="text-7xl mb-4">🎉</div>
+             <h1 class="text-3xl font-bold text-green-600 mb-2">ถูกต้องนะค้าบ!</h1>
+             <p class="text-gray-500 mb-8">เก่งมาก! ไอวาวเก่งที่ฉู้ดด ❤️</p>
+             <button onclick="goTo(7)" class="px-8 py-3 bg-green-500 text-white rounded-full font-bold shadow-lg hover:scale-105 transition transform flex items-center gap-2 mx-auto">
+               <span>ไปดูต่อเลย...</span> 🚀
+             </button>
+           </div>
+        </div>
+      `;
     }
 
-    function showPage(pageNumber) {
-      if (slideshowInterval) clearInterval(slideshowInterval);
-      currentPage = pageNumber;
-      renderApp();
-      sfx.click();
-      if (currentPage === 2 && currentQuestion === 2) {
-         setTimeout(setupRunawayEffect, 100);
+    // 7. Plead Page
+    function PagePlead() {
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#fff0f3] relative p-6">
+           <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+           
+           <div class="z-10 text-center w-full max-w-sm bg-white/80 backdrop-blur p-6 rounded-3xl shadow-sm border border-pink-100">
+             <div class="text-6xl mb-4 sad-animate">🥺</div>
+             <h1 class="text-2xl font-bold mb-3 text-k-text">ก่อนอื่น เค้าขอโทษนะ...</h1>
+             <p class="text-gray-600 mb-4 leading-relaxed text-sm">
+                 เค้าลืมทำเซอร์ไพรส์วันครบรอบ...<br>ไม่ได้ตั้งใจจริงๆ นะ<br>ยกโทษให้เค้าเถอะนะคนดี
+             </p>
+             
+             <div id="plead-msg" class="h-8 mb-4 text-pink-500 font-bold text-sm animate-pulse"></div>
+
+             <div class="flex flex-col gap-3 w-full">
+                 <button onclick="goTo(8)" class="w-full py-3.5 rounded-2xl bg-[#a7f3d0] text-green-700 font-bold shadow-sm btn-minimal border border-green-200">
+                     ยกโทษให้ (ดีกันนะ) ❤️
+                 </button>
+                 <button onclick="doPlead()" id="btn-plead" class="w-full py-3 rounded-2xl bg-gray-100 text-gray-500 font-medium btn-minimal">
+                     ไม่ยกโทษให้ 😤
+                 </button>
+             </div>
+           </div>
+        </div>
+      `;
+    }
+
+    // 8. Forgive Page
+    function PageForgive() {
+       // Effect
+       setTimeout(() => { for(let i=0; i<15; i++) setTimeout(spawnConfetti, i*150); }, 100);
+       return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#fffceb] relative p-6 overflow-hidden">
+           <img src="${assets.happy}" class="w-32 h-32 mb-6 float-soft drop-shadow-md">
+           <h1 class="text-3xl font-bold mb-2 text-k-text">เย้!! ดีกันแล้ว 🎉</h1>
+           <p class="text-gray-500 mb-8 text-center leading-relaxed px-4">
+               น่ารักที่สุดในโลกเลย!<br>สัญญาว่าจะไม่ดื้อไม่ซนแล้วครับ<br>ไปเล่นเกมกันต่อเล้ยยย! 🚀
+           </p>
+           
+           <button onclick="goTo(2)" class="px-10 py-4 bg-k-accent text-white rounded-full font-bold shadow-lg btn-minimal hover:scale-105 transform transition">
+               ไปเล่นเกมกัน! ▶️
+           </button>
+        </div>
+       `;
+    }
+
+    // 2. Quiz Page
+    function PageQuiz() {
+      const q = state.q === 1 ? config.q1 : config.q2;
+      
+      // เลือกรูปมาแสดงตามข้อ (ดึงจาก gallery_images)
+      const img1 = state.q === 1 ? config.gallery_images[0] : config.gallery_images[2];
+      const img2 = state.q === 1 ? config.gallery_images[1] : config.gallery_images[3];
+
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-white relative overflow-hidden">
+           
+           <!-- รูปประกอบลอยๆ (Decor Images) -->
+           <div class="absolute top-12 -left-4 w-28 h-28 rotate-6 float-soft opacity-90 z-0" style="animation-delay: 0s;">
+              <div class="w-full h-full p-1 bg-white shadow-lg rounded-xl transform -rotate-3 border border-pink-100">
+                <img src="${img1}" class="w-full h-full object-cover rounded-lg">
+              </div>
+           </div>
+           
+           <div class="absolute bottom-24 -right-4 w-32 h-32 -rotate-12 float-soft opacity-90 z-0" style="animation-delay: 1.5s;">
+              <div class="w-full h-full p-1 bg-white shadow-lg rounded-full border-4 border-pink-50 overflow-hidden">
+                <img src="${img2}" class="w-full h-full object-cover">
+              </div>
+           </div>
+
+           <!-- Background Heart -->
+           <img src="${assets.heart}" class="absolute top-5 right-[-10px] w-24 h-24 opacity-10 rotate-12 z-0">
+           
+           <div class="w-full max-w-sm px-6 text-center z-10">
+             <div class="mb-4 inline-block px-3 py-1 bg-k-pink rounded-full text-xs font-bold text-pink-500 shadow-sm">Question ${state.q}/2</div>
+             
+             <!-- โจทย์ -->
+             <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-4 mb-6 shadow-sm border border-white">
+                <h2 class="text-2xl font-bold text-k-text leading-relaxed">${q.text}</h2>
+             </div>
+             
+             <div class="space-y-4 relative h-48 flex flex-col justify-center">
+               <button onclick="answer(false)" id="btn-wrong" class="w-full py-4 bg-white border-2 border-gray-100 rounded-2xl text-gray-600 font-medium btn-minimal hover:bg-gray-50 shadow-sm relative z-20">
+                 ${q.a}
+               </button>
+               <button onclick="answer(true)" id="btn-correct" class="w-full py-4 bg-[#fff0f3] border-2 border-[#ffccd5] rounded-2xl text-pink-600 font-bold btn-minimal hover:bg-[#ffdee6] shadow-sm relative z-10">
+                 ${q.b}
+               </button>
+             </div>
+           </div>
+        </div>
+      `;
+    }
+
+    // 10. Scratch Page (NEW GAME)
+    function PageScratch() {
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-pink-50 relative overflow-hidden">
+           <div class="z-10 text-center">
+             <h2 class="text-2xl font-bold text-k-text mb-2">ขูดเพื่อลุ้นรางวัล! ✨</h2>
+             <p class="text-sm text-gray-400 mb-6">ใช้นิ้วถูๆ ที่การ์ดเลย</p>
+             
+             <div class="relative w-64 h-64 mx-auto rounded-xl overflow-hidden shadow-xl border-4 border-white">
+                <!-- Hidden Image -->
+                <img src="${config.gallery_images[5]}" class="absolute inset-0 w-full h-full object-cover z-0">
+                
+                <!-- Scratch Canvas -->
+                <canvas id="scratch-canvas" width="256" height="256" class="absolute inset-0 z-10 w-full h-full cursor-pointer"></canvas>
+             </div>
+
+             <div id="scratch-msg" class="flex flex-col items-center justify-center mt-6 opacity-0 transition-opacity duration-500 space-y-3">
+               <div class="text-xl font-bold text-red-500 drop-shadow-sm animate-bounce">
+                  🎉 รับฟรี! MIXUE 1 แก้ว 🍦
+               </div>
+               <button onclick="goTo(3)" class="px-8 py-3 bg-pink-500 text-white rounded-full font-bold shadow-lg hover:scale-105 transition transform">
+                 ไปรับรางวัลกัน! 🎁
+               </button>
+             </div>
+           </div>
+        </div>
+      `;
+    }
+
+    // Init Scratch Canvas
+    function initScratch() {
+      const canvas = document.getElementById('scratch-canvas');
+      if(!canvas) return;
+      const ctx = canvas.getContext('2d');
+      
+      // Fix Scale for Retina/High DPI
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      // Fill Overlay
+      ctx.fillStyle = '#ffb7c5'; // Pink Color
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Text on Overlay
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 20px Mali';
+      ctx.textAlign = 'center';
+      ctx.fillText("ขูดตรงนี้เบาๆ ❤️", canvas.width/2, canvas.height/2);
+      ctx.fillText("❓❓❓", canvas.width/2, canvas.height/2 + 30);
+
+      let isDrawing = false;
+
+      function scratch(x, y) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2); // Brush Size
+        ctx.fill();
+        checkCompletion();
+      }
+
+      function getPos(e) {
+        const r = canvas.getBoundingClientRect();
+        let clientX = e.clientX;
+        let clientY = e.clientY;
+        if(e.touches && e.touches.length > 0) {
+           clientX = e.touches[0].clientX;
+           clientY = e.touches[0].clientY;
+        }
+        return {
+          x: clientX - r.left,
+          y: clientY - r.top
+        };
+      }
+
+      // Mouse Events
+      canvas.addEventListener('mousedown', (e) => { isDrawing = true; const pos = getPos(e); scratch(pos.x, pos.y); });
+      canvas.addEventListener('mousemove', (e) => { if(isDrawing) { const pos = getPos(e); scratch(pos.x, pos.y); } });
+      canvas.addEventListener('mouseup', () => isDrawing = false);
+      canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+      // Touch Events
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; const pos = getPos(e); scratch(pos.x, pos.y); e.preventDefault(); }, {passive: false});
+      canvas.addEventListener('touchmove', (e) => { if(isDrawing) { const pos = getPos(e); scratch(pos.x, pos.y); e.preventDefault(); } }, {passive: false});
+      canvas.addEventListener('touchend', () => isDrawing = false);
+
+      // Check % Scratched (Throttled)
+      let lastCheck = 0;
+      function checkCompletion() {
+        const now = Date.now();
+        if(now - lastCheck < 200) return; // Check every 200ms
+        lastCheck = now;
+
+        // Sampling pixels (checking every 10th pixel for performance)
+        const w = canvas.width, h = canvas.height;
+        const data = ctx.getImageData(0, 0, w, h).data;
+        let transparent = 0;
+        const step = 10; 
+        for(let i = 0; i < data.length; i += 4 * step) {
+          if(data[i+3] < 128) transparent++;
+        }
+        
+        const totalPixels = (data.length / 4) / step;
+        if(transparent / totalPixels > 0.4) { // 40% cleared
+           canvas.style.transition = 'opacity 1s';
+           canvas.style.opacity = '0'; // Fade out rest
+           document.getElementById('scratch-msg').classList.remove('opacity-0');
+           playSound('success');
+        }
       }
     }
 
-    function showSuccessModal() {
-        sfx.success();
-        const modal = document.getElementById('success-modal');
-        const content = document.getElementById('modal-content');
-        modal.classList.remove('hidden');
-        content.classList.add('pop-in');
-        for (let i = 0; i < 15; i++) { setTimeout(() => createHeartRain(), i * 100); }
-        setTimeout(() => {
-            content.classList.remove('pop-in');
-            content.style.opacity = '0';
-            content.style.transform = 'scale(0.8)';
-            content.style.transition = 'all 0.3s ease';
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                showPage(7); 
-            }, 300);
-        }, 2000);
+
+    // 3. Gift Page (หน้าดอกไม้)
+    function PageGift() {
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-k-cream relative overflow-hidden">
+          <div class="text-center p-6 z-10">
+             <img src="${assets.bouquet}" class="w-48 h-48 mx-auto mb-6 float-soft drop-shadow-lg" onclick="goTo(4)">
+             <h2 class="text-2xl font-bold text-k-text mb-2">${config.surprise.title}</h2>
+             <p class="text-gray-500 mb-8 px-4 leading-relaxed">${config.surprise.msg}</p>
+             
+             <button onclick="goTo(4)" class="px-8 py-3 bg-k-text text-white rounded-full font-medium shadow-lg btn-minimal flex items-center gap-2 mx-auto animate-bounce">
+               <span>รับดอกไม้ & อ่านจดหมาย</span> 💌
+             </button>
+          </div>
+        </div>
+      `;
     }
 
-    // Numpad Functions
-    function appendCode(num) {
-      const input = document.getElementById('code-input');
-      if (input.value.length < 4) { input.value += num; sfx.click(); }
+    // 4. Letter Page (หน้าซองจดหมาย)
+    function PageLetter() {
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#fff9fb]">
+          <h2 class="text-xl font-bold text-k-text mb-8">Letter for You</h2>
+          
+          <div class="envelope-container mb-24" onclick="openEnvelope()">
+            <div id="envelope" class="envelope" style="background: none;">
+              <!-- กระดาษจดหมาย (ซ่อนอยู่ข้างหลังตอนแรก) -->
+              <div class="letter-paper">${config.letter}</div>
+              
+              <!-- รูปซองจดหมาย (บังหน้า) -->
+              <img src="${assets.envelope_bg}" class="relative w-full h-full object-contain z-20 drop-shadow-xl pointer-events-none">
+            </div>
+          </div>
+          
+          <button id="next-btn" onclick="goTo(5)" class="opacity-0 px-6 py-3 border-2 border-k-text text-k-text rounded-full font-bold transition-all duration-500 hover:bg-k-text hover:text-white relative z-50">
+            อ่านจบแล้ว (ไปต่อ) →
+          </button>
+        </div>
+      `;
     }
-    function deleteCode() {
-      const input = document.getElementById('code-input');
-      input.value = input.value.slice(0, -1); sfx.click();
+
+    // 5. Gallery Page
+    function PageGallery() {
+      const time = calcTime();
+      return `
+        <div class="w-full h-full bg-[#fffcf4] overflow-y-auto pb-10">
+           <!-- Header -->
+           <div class="pt-10 pb-6 text-center">
+             <h1 class="text-2xl font-bold text-k-text">Our Memories ☁️</h1>
+             <p class="text-sm text-gray-400 mt-1">${time}</p>
+           </div>
+
+           <!-- Polaroid Slide -->
+           <div class="relative w-64 h-80 mx-auto bg-white p-3 shadow-xl transform -rotate-2 mb-10 transition-transform hover:rotate-0 duration-500">
+              <div class="w-full h-64 bg-gray-100 overflow-hidden relative">
+                ${config.gallery_images.map((url, i) => `<img src="${url}" class="slide-img absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${i===0?'opacity-100':'opacity-0'}">`).join('')}
+              </div>
+              <div class="text-center pt-3 font-handwriting text-gray-500 text-sm">Forever & Always</div>
+           </div>
+           
+           <!-- Message Box -->
+           <div class="mx-6 p-6 bg-white rounded-2xl shadow-sm border border-pink-100 text-center relative overflow-hidden">
+              <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-200 to-yellow-100"></div>
+              <p class="text-k-text leading-loose font-medium">${config.final_msg}</p>
+              <div class="mt-4 text-xs text-gray-400">By ${config.partner_name}</div>
+           </div>
+
+           <div class="mt-10 text-center">
+             <button onclick="goTo(1); state.q=1; state.envelopeOpen=false; state.pleadCount=0;" class="text-gray-300 text-sm underline">Play Again</button>
+           </div>
+        </div>
+      `;
     }
-    function clearCode() {
-      const input = document.getElementById('code-input');
-      input.value = ''; sfx.click();
+
+    // 6. Wrong Page (ถ้าตอบผิด)
+    function PageWrong() {
+      return `
+        <div class="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white p-6">
+           <img src="${assets.cat}" class="w-32 h-32 mb-6 animate-pulse">
+           <h1 class="text-2xl font-bold mb-2">ใจร้ายยย! 😭</h1>
+           <p class="opacity-80 mb-8 text-center">ทำไมตอบแบบนี้... เค้าเสียใจนะ</p>
+           <button onclick="goTo(2)" class="px-8 py-3 bg-pink-500 rounded-full font-bold">โอ๋ๆ ตอบใหม่ก็ได้</button>
+        </div>
+      `;
     }
+
+    // --- Helper Functions ---
+
+    // Numpad Logic
+    function typeCode(n) {
+      const input = document.getElementById('pass-input');
+      if(input.value.length < 4) { input.value += n; playSound('pop'); }
+    }
+    function delCode() {
+      const input = document.getElementById('pass-input');
+      input.value = input.value.slice(0, -1);
+    }
+    function clearCode() { document.getElementById('pass-input').value = ''; }
     function checkCode() {
-      const input = document.getElementById('code-input');
-      const errorMsg = document.getElementById('error-msg');
-      if (input.value === defaultConfig.secret_code) {
-        showSuccessModal();
+      const val = document.getElementById('pass-input').value;
+      if(val === config.secret_code) {
+        playSound('success');
+        goTo(9); // Go to Success Page (9) instead of Plead (7)
       } else {
-        sfx.error();
-        errorMsg.style.display = 'block';
+        playSound('error');
+        const input = document.getElementById('pass-input');
         input.classList.add('shake');
-        setTimeout(() => { input.classList.remove('shake'); errorMsg.style.display = 'none'; }, 1000);
+        input.value = '';
+        input.placeholder = "ผิดนะ!";
+        setTimeout(() => { input.classList.remove('shake'); input.placeholder = "••••"; }, 500);
       }
     }
-
-    function plead() {
-        sfx.error();
-        pleadCount++;
+    
+    // Plead Logic
+    function doPlead() {
+        playSound('error');
+        state.pleadCount++;
         const pleads = [
             "ฮื่ออออ... นะนะนะ 🥺",
             "ขอโทษจริงๆ สัญญาจะดีกัน 🙏",
@@ -426,362 +677,120 @@
             "กราบงามๆ 3 ที 🙇‍♂️",
             "รักนะจุ๊บๆ 🐻"
         ];
+        document.getElementById('plead-msg').innerText = pleads[Math.floor(Math.random() * pleads.length)];
         
-        const msg = pleads[Math.floor(Math.random() * pleads.length)];
-        const app = document.getElementById('app');
-        app.classList.add('shake');
-        setTimeout(() => app.classList.remove('shake'), 500);
-
-        const container = document.getElementById('plead-message-container');
-        const text = document.getElementById('plead-text');
-        
-        if (container && text) {
-            text.innerText = msg;
-            container.classList.remove('opacity-0');
-            text.classList.remove('animate-pulse');
-            void text.offsetWidth; text.classList.add('animate-pulse');
-        }
-
-        if(pleadCount > 3) {
-            const yesBtn = document.getElementById('btn-forgive');
-            yesBtn.style.transform = `scale(${1 + (pleadCount - 3) * 0.05})`;
-            yesBtn.innerText = "ยกโทษให้เถอะ! (กดตรงนี้! ✨)";
+        // ถ้ากดปฏิเสธหลายรอบ ปุ่มยอมจะใหญ่ขึ้น
+        if(state.pleadCount > 2) {
+            const btn = document.querySelector('button[onclick="goTo(8)"]');
+            btn.style.transform = `scale(${1 + (state.pleadCount * 0.05)})`;
         }
     }
 
-    function selectAnswer(isCorrect, questionNum) {
-      sfx.click();
-      if (questionNum === 1 && !isCorrect) { sfx.error(); showPage(6); return; }
+    // Quiz Logic
+    function answer(isCorrect) {
+      if(!isCorrect && state.q === 1) { goTo(6); return; } // ตอบผิดข้อ 1
+      
+      playSound('success');
+      // Create confetti
+      for(let i=0; i<10; i++) setTimeout(spawnConfetti, i*100);
 
-      const buttonA = document.getElementById(`answer-${questionNum}a`);
-      const buttonB = document.getElementById(`answer-${questionNum}b`);
-
-      if (isCorrect) {
-        hearts++; sfx.success();
-        const correctBtn = buttonB;
-        correctBtn.classList.add('bounce');
-        correctBtn.innerHTML += ' ✅';
-        correctBtn.style.backgroundColor = '#d1fae5'; correctBtn.style.borderColor = '#10b981';
-        for (let i = 0; i < 5; i++) { setTimeout(() => createHeartRain(), i * 100); }
-        setTimeout(() => {
-          if (currentQuestion < 2) {
-            currentQuestion++; renderApp();
-            if (currentQuestion === 2) setTimeout(setupRunawayEffect, 100);
-          } else { currentQuestion = 1; showPage(3); }
-        }, 1200);
+      if(state.q === 1) {
+        state.q++;
+        setTimeout(render, 800);
       } else {
-        sfx.error();
-        const wrongBtn = buttonA;
-        wrongBtn.classList.add('shake');
-        wrongBtn.style.backgroundColor = '#fee2e2'; wrongBtn.style.borderColor = '#ef4444';
-        setTimeout(() => wrongBtn.classList.remove('shake'), 500);
+        if(!isCorrect) return; // ข้อ 2 ถ้ากดผิดจะกดไม่ได้ (runaway btn)
+        goTo(10); // Go to Scratch Card (10) instead of Gift (3)
       }
     }
 
-    function toggleEnvelope() {
-      if (envelopeOpen) return;
-      sfx.success(); envelopeOpen = true;
-      const envelope = document.getElementById('envelope');
-      envelope.classList.add('open');
-      for (let i = 0; i < 20; i++) { setTimeout(() => createHeartRain(), i * 80); }
+    function setupRunawayBtn() {
+      const btn = document.getElementById('btn-wrong');
+      if(!btn) return;
+      
+      const move = (e) => {
+        if(e.type === 'touchstart') e.preventDefault(); 
+        const x = (Math.random() - 0.5) * 150;
+        const y = (Math.random() - 0.5) * 150;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+        btn.innerText = ["ไม่ได้หรอก 😝", "กดอันบน!", "ฮั่นแน่", "จะไปไหน"][Math.floor(Math.random()*4)];
+        btn.style.background = "#ffe4e9";
+        btn.style.borderColor = "transparent";
+      };
+      
+      btn.addEventListener('mouseover', move);
+      btn.addEventListener('touchstart', move);
     }
 
+    // Envelope
+    function openEnvelope() {
+      if(state.envelopeOpen) return;
+      state.envelopeOpen = true;
+      playSound('success');
+      document.getElementById('envelope').classList.add('open');
+      setTimeout(() => {
+        const btn = document.getElementById('next-btn');
+        btn.classList.remove('opacity-0');
+        btn.classList.add('opacity-100', 'translate-y-[-10px]');
+      }, 800);
+    }
+
+    // Slideshow
     function startSlideshow() {
-      const slides = document.querySelectorAll('.slide-img');
-      if (slides.length === 0) return;
-      let currentIndex = 0;
-      slides[0].classList.add('active');
-      slideshowInterval = setInterval(() => {
-        slides[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % slides.length;
-        slides[currentIndex].classList.add('active');
+      const imgs = document.querySelectorAll('.slide-img');
+      let idx = 0;
+      setInterval(() => {
+        imgs.forEach(img => img.classList.replace('opacity-100', 'opacity-0'));
+        idx = (idx + 1) % imgs.length;
+        imgs[idx].classList.replace('opacity-0', 'opacity-100');
       }, 3000);
     }
 
-    function renderApp() {
-      const app = document.getElementById('app');
-      const pages = { 1: renderPage1, 2: renderPage2, 3: renderPage3, 4: renderPage4, 5: renderPage5, 6: renderPage6, 7: renderPage7, 8: renderPage8 };
-      app.innerHTML = pages[currentPage](defaultConfig);
-      if (currentPage === 5) startSlideshow();
+    // Time Calc
+    function calcTime() {
+      const diff = new Date() - new Date(config.start_date);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      return `${days} Days Together`;
     }
 
-    // --- Pages Rendering ---
-
-    function renderPage1(config) {
-      return `
-        <div class="w-full h-full flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-pink-50 to-pink-100">
-          <div class="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
-             <div class="absolute top-5 left-5 text-4xl animate-pulse">🔒</div>
-             <div class="absolute bottom-5 right-5 text-5xl animate-pulse" style="animation-delay: 1s">🔐</div>
-          </div>
-          <div class="text-center w-full max-w-sm px-4 z-10">
-            <div class="bg-white/80 backdrop-blur-sm p-5 rounded-3xl shadow-xl border-2 border-white">
-                <div class="text-5xl mb-2">🔒</div>
-                <h1 class="fade-in mb-1 text-2xl font-bold text-pink-800">ใส่รหัสลับ 💗</h1>
-                <div class="mb-4">
-                  <input id="code-input" type="password" readonly class="w-full text-center px-4 py-3 text-3xl font-bold rounded-xl border-2 focus:outline-none focus:border-pink-400 bg-gray-50 tracking-[0.5em] text-pink-600 h-16" placeholder="****" />
-                </div>
-                
-                <!-- Mobile Friendly Numpad -->
-                <div class="numpad-grid mb-4 select-none">
-                  <div onclick="appendCode('1')" class="num-btn">1</div>
-                  <div onclick="appendCode('2')" class="num-btn">2</div>
-                  <div onclick="appendCode('3')" class="num-btn">3</div>
-                  <div onclick="appendCode('4')" class="num-btn">4</div>
-                  <div onclick="appendCode('5')" class="num-btn">5</div>
-                  <div onclick="appendCode('6')" class="num-btn">6</div>
-                  <div onclick="appendCode('7')" class="num-btn">7</div>
-                  <div onclick="appendCode('8')" class="num-btn">8</div>
-                  <div onclick="appendCode('9')" class="num-btn">9</div>
-                  <div onclick="clearCode()" class="num-btn bg-red-50 border-red-200 text-red-400 text-base">C</div>
-                  <div onclick="appendCode('0')" class="num-btn">0</div>
-                  <div onclick="deleteCode()" class="num-btn text-gray-400 text-base">⌫</div>
-                </div>
-
-                <p id="error-msg" class="mb-3 text-sm font-semibold text-red-500 hidden fade-in h-5">❌ รหัสไม่ถูกต้อง! ลองใหม่สิ วันไหนหร้าา</p>
-                <button onclick="checkCode()" class="game-button w-full py-3 rounded-xl font-bold shadow-md bg-pink-500 text-white text-lg active:bg-pink-600">✨ ตกลง</button>
-            </div>
-          </div>
-        </div>
-      `;
+    function spawnConfetti() {
+      const el = document.createElement('div');
+      el.innerText = ['🌸','🤍','☁️'][Math.floor(Math.random()*3)];
+      el.style.position = 'fixed';
+      el.style.left = Math.random()*100 + 'vw';
+      el.style.top = '-50px';
+      el.style.fontSize = (Math.random()*20 + 10) + 'px';
+      el.style.animation = `fall ${Math.random()*3 + 2}s linear forwards`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 5000);
     }
 
-    function renderPage2(config) {
-      const question = currentQuestion === 1 ? config.question_1 : config.question_2;
-      const answerA = currentQuestion === 1 ? config.answer_1a : config.answer_2a;
-      const answerB = currentQuestion === 1 ? config.answer_1b : config.answer_2b;
-      const extraClass = currentQuestion === 2 ? "h-56 flex flex-col justify-center" : ""; 
-      
-      const decorImg1 = config.gallery_images[0];
-      const decorImg2 = config.gallery_images[1];
+    // Style for falling
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }`;
+    document.head.appendChild(style);
 
-      return `
-        <div class="w-full h-full flex items-center justify-center overflow-hidden py-6 relative bg-gradient-to-br from-white to-pink-50">
-          <!-- Decorative Frames (Visible on mobile now) -->
-          <div class="absolute -top-6 -left-6 w-28 h-28 frame-heart rotate-[-12deg] z-0 opacity-40 pointer-events-none">
-             <img src="${decorImg1}" class="w-full h-full object-cover">
-          </div>
-          <div class="absolute -bottom-6 -right-6 w-32 h-32 frame-circle rotate-[12deg] z-0 opacity-40 pointer-events-none">
-             <img src="${decorImg2}" class="w-full h-full object-cover">
-          </div>
-
-          <div class="text-center px-6 w-full max-w-sm z-10 flex flex-col h-full justify-center">
-            <div class="mb-4 flex justify-center space-x-2">
-              <span class="text-4xl transition-all duration-500 transform ${hearts >= 1 ? 'scale-110' : 'opacity-30'}">💖</span>
-              <span class="text-4xl transition-all duration-500 transform ${hearts >= 2 ? 'scale-110' : 'opacity-30'}">💖</span>
-            </div>
-            
-            <div class="mb-6 p-6 rounded-3xl relative overflow-hidden bg-white shadow-lg border border-pink-100">
-               <div class="absolute top-0 left-0 w-full h-2 bg-pink-100"><div class="h-full bg-pink-500 transition-all duration-1000" style="width: ${currentQuestion === 1 ? '50%' : '100%'}"></div></div>
-               <h2 class="text-sm font-bold text-pink-400 mb-1">คำถามที่ ${currentQuestion} / 2</h2>
-               <p class="text-xl font-bold text-gray-800 leading-snug">${question}</p>
-            </div>
-            
-            <div class="space-y-3 w-full relative ${extraClass}">
-              <button id="answer-${currentQuestion}a" onclick="selectAnswer(false, ${currentQuestion})" class="game-button w-full px-4 py-4 rounded-xl font-bold shadow-sm bg-white border-2 border-pink-200 text-lg relative z-20 text-gray-700 active:bg-pink-50">
-                ${currentQuestion === 2 ? 'A. ' : 'A. '}${answerA}
-              </button>
-              <button id="answer-${currentQuestion}b" onclick="selectAnswer(true, ${currentQuestion})" class="game-button w-full px-4 py-4 rounded-xl font-bold shadow-sm bg-white border-2 border-pink-200 text-lg relative z-10 text-gray-700 active:bg-pink-50">
-                B. ${answerB}
-              </button>
-            </div>
-             ${currentQuestion === 2 ? '<p class="mt-4 text-xs text-gray-400"> (ห้ามโกงนะ!) </p>' : ''}
-          </div>
-        </div>
-      `;
+    // Initial Render
+    render();
+    
+    // Auto Play Music
+    window.onload = function() {
+        const audio = document.getElementById('bg-music');
+        audio.src = config.music_url;
+        audio.play().then(() => {
+            state.musicPlaying = true;
+            const btn = document.getElementById('music-control');
+            btn.classList.add('playing');
+            btn.innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/3209/3209265.png" class="w-5 h-5 text-pink-500">`;
+        }).catch(error => {
+            console.log("Autoplay prevented by browser, waiting for interaction.");
+            // Optional: Add a one-time click listener to start music if autoplay failed
+            const startAudio = () => {
+                toggleMusic();
+                document.removeEventListener('click', startAudio);
+            };
+            document.addEventListener('click', startAudio, { once: true });
+        });
     }
-
-    function renderPage7(config) {
-      return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-pink-50 text-gray-800 p-4 relative overflow-hidden">
-           <div class="absolute inset-0 pointer-events-none opacity-30">
-              <div class="absolute top-10 left-10 text-4xl float">💔</div>
-              <div class="absolute bottom-20 right-20 text-4xl float" style="animation-delay: 1s">🌧️</div>
-           </div>
-           <div class="z-10 text-center w-full max-w-sm bg-white p-6 rounded-3xl shadow-xl border-2 border-pink-100">
-              <div class="text-7xl mb-4 sad-animate">🥺</div>
-              <h1 class="text-2xl font-bold mb-3 text-pink-500">เค้าขอโทษนะค้าบ...</h1>
-              <p class="text-base mb-4 leading-relaxed text-gray-600 px-2">
-                  เค้าลืมทำเซอร์ไพรส์วันครบรอบ...<br>ไม่ได้ตั้งใจจริงๆ นะ<br>ยกโทษให้เค้านะ?
-              </p>
-              
-              <div id="plead-message-container" class="h-14 flex items-center justify-center mb-3 transition-opacity duration-300 opacity-0 w-full">
-                 <p id="plead-text" class="text-sm font-bold text-pink-600 animate-pulse bg-pink-100 px-3 py-1.5 rounded-lg whitespace-nowrap overflow-hidden text-ellipsis max-w-full"></p>
-              </div>
-              
-              <div class="flex flex-col gap-3 w-full">
-                  <button id="btn-forgive" onclick="showPage(8)" class="game-button w-full py-3.5 rounded-xl bg-green-500 hover:bg-green-400 text-white font-bold text-lg shadow-lg transition-all">
-                      ดีกันนะ! ยกโทษให้ ❤️
-                  </button>
-                  <button onclick="plead()" class="game-button w-full py-3 rounded-xl bg-gray-100 text-gray-500 font-semibold text-base">
-                      ไม่ยกโทษให้ 😤
-                  </button>
-              </div>
-           </div>
-        </div>
-      `;
-    }
-
-    function renderPage8(config) {
-      setTimeout(() => { for (let i = 0; i < 20; i++) { setTimeout(() => createHeartRain(), i * 100); } }, 200);
-      return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-yellow-50 text-gray-800 p-4 relative overflow-hidden">
-           <div class="absolute inset-0 pointer-events-none opacity-30">
-              <div class="absolute top-10 right-10 text-5xl float">🎉</div>
-              <div class="absolute bottom-20 left-20 text-5xl float" style="animation-delay: 1s">✨</div>
-           </div>
-           <div class="z-10 text-center w-full max-w-sm bg-white p-8 rounded-3xl shadow-xl border-4 border-yellow-200">
-              <div class="text-7xl mb-4 jump-animate">🥳</div>
-              <h1 class="text-2xl font-bold mb-3 text-orange-500">เย้!! ขอบคุณค้าบ ❤️</h1>
-              <p class="text-base mb-6 leading-relaxed text-gray-600">
-                  น่ารักที่สุดในโลกเลย!<br>สัญญาว่าจะไม่ดื้อไม่ซนแล้วครับ<br>ไปเล่นเกมกันต่อเล้ยยย! 🚀
-              </p>
-              <button onclick="showPage(2)" class="game-button w-full py-3.5 rounded-full bg-orange-400 text-white font-bold text-lg shadow-lg">
-                  ไปเล่นเกมกัน! ▶️
-              </button>
-           </div>
-        </div>
-      `;
-    }
-
-    function renderPage3(config) {
-      return `
-        <div class="w-full h-full flex items-center justify-center overflow-hidden relative bg-gradient-to-br from-white to-pink-100">
-          <div class="absolute top-10 left-10 text-6xl opacity-20 float">🎈</div>
-          <div class="absolute bottom-10 right-10 text-6xl opacity-20 float" style="animation-delay: 1.5s">✨</div>
-          <div class="text-center px-6 w-full max-w-sm z-10">
-            <div class="mb-6"><div class="sparkle inline-block text-8xl">🎁</div></div>
-            <h2 class="fade-in mb-4 text-2xl font-bold drop-shadow-sm text-pink-600">${config.surprise_title}</h2>
-            <div class="mb-8 p-6 rounded-3xl backdrop-blur-md bg-white/60 border border-white shadow-xl">
-              <div class="text-5xl mb-4">✨💖✨</div>
-              <p class="text-lg leading-relaxed font-medium text-gray-700">${config.surprise_message}</p>
-            </div>
-            <button onclick="showPage(4)" class="game-button px-8 py-3.5 rounded-full font-bold shadow-xl flex items-center justify-center mx-auto gap-2 bg-pink-500 text-white text-lg">
-                <span>📨</span> อ่านจดหมายรักต่อ
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderPage4(config) {
-      return `
-        <div class="w-full h-full flex flex-col items-center justify-center overflow-hidden py-6 bg-pink-50">
-          <div class="text-center px-6 w-full max-w-sm flex-1 flex flex-col items-center justify-center">
-            <h2 class="mb-2 text-2xl font-bold animate-fade-in-down text-pink-700">💌 จดหมายรักถึงเธอ</h2>
-            <p class="mb-8 text-sm opacity-60 text-pink-900">กดที่ซองจดหมายเพื่อเปิดอ่าน 👇</p>
-            <div class="envelope-container mb-16 relative">
-              <div id="envelope" class="envelope" onclick="toggleEnvelope()">
-                <div class="letter-paper"><p style="line-height: 1.6; color: #4a4a4a;">${config.letter_content}</p></div>
-                <div class="envelope-flap"></div>
-                <div class="envelope-body flex items-center justify-center"><span class="text-4xl filter drop-shadow-md">💖</span></div>
-              </div>
-            </div>
-            <div class="approve-btn-container relative group cursor-pointer opacity-0 animate-[fadeIn_1s_ease_forwards_2s]" style="animation-delay: 3s;" onclick="showPage(5)">
-                <div class="absolute -top-10 -right-4 approve-stamp transform rotate-12"><img src="${config.approve_img}" class="w-16 h-16 drop-shadow-md animate-bounce"></div>
-                <button class="game-button px-6 py-4 rounded-xl font-bold shadow-md border-2 border-dashed relative overflow-hidden bg-white w-full border-green-400">
-                    <div class="flex items-center gap-3 justify-center">
-                        <span class="text-2xl">✅</span>
-                        <div class="text-left">
-                            <div class="text-xs font-medium text-gray-400">อ่านจบแล้ว</div>
-                            <div class="text-lg font-bold text-green-600">อนุมัติความรักนี้</div>
-                        </div>
-                    </div>
-                </button>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderPage5(config) {
-      const time = calculateTimeTogether(config.start_date);
-      setTimeout(() => { for (let i = 0; i < 30; i++) { setTimeout(() => createHeartRain(), i * 150); } }, 500);
-      
-      const slidesHtml = config.gallery_images.map((url, index) => 
-        `<img src="${url}" class="slide-img ${index === 0 ? 'active' : ''}" alt="Memory ${index+1}" />`
-      ).join('');
-
-      const images = config.gallery_images;
-      // Simplified positions for mobile to avoid covering text
-      const positions = [
-          { top: '2%', left: '2%', rot: '-5deg', img: images[0], type: 'frame-polaroid', class: '' },
-          { top: '5%', right: '-5%', rot: '10deg', img: images[1], type: 'frame-circle', class: '' },
-          { bottom: '2%', left: '-5%', rot: '-10deg', img: images[2], type: 'frame-circle', class: '' },
-          { bottom: '5%', right: '2%', rot: '5deg', img: images[3], type: 'frame-polaroid', class: '' }
-      ];
-
-      const floatingPhotosHtml = positions.map(pos => `
-        <div class="mini-photo ${pos.type} ${pos.class}" style="top: ${pos.top || 'auto'}; bottom: ${pos.bottom || 'auto'}; left: ${pos.left || 'auto'}; right: ${pos.right || 'auto'}; transform: rotate(${pos.rot}); width: 80px; height: 80px;">
-            <img src="${pos.img}" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;">
-        </div>
-      `).join('');
-
-      return `
-        <div class="w-full h-full flex flex-col items-center justify-center overflow-y-auto overflow-x-hidden py-6 relative bg-gradient-to-br from-pink-100 to-pink-200">
-          <div class="absolute inset-0 overflow-hidden pointer-events-none w-full h-full">
-             <div class="w-full h-full relative pointer-events-auto">
-                ${floatingPhotosHtml}
-             </div>
-          </div>
-
-          <div class="text-center px-4 w-full max-w-sm relative z-10 flex flex-col h-full justify-center">
-            <h1 class="fade-in mb-4 text-2xl font-bold drop-shadow-sm text-pink-700">สรุปความรักของเรา 💞</h1>
-            
-            <div class="mb-6 p-4 rounded-2xl bg-white/90 backdrop-blur border border-pink-200 shadow-md">
-               <p class="text-xs uppercase tracking-widest text-pink-400 mb-2 font-bold">Time Together</p>
-               <div class="flex justify-center gap-3 text-center">
-                  ${time.years > 0 ? `<div><span class="text-2xl font-bold text-gray-800">${time.years}</span><br><span class="text-[10px] text-gray-500">ปี</span></div>` : ''}
-                  <div><span class="text-2xl font-bold text-gray-800">${time.months}</span><br><span class="text-[10px] text-gray-500">เดือน</span></div>
-                  <div><span class="text-2xl font-bold text-gray-800">${time.days}</span><br><span class="text-[10px] text-gray-500">วัน</span></div>
-               </div>
-               <div class="mt-2 text-[10px] text-pink-400 font-medium">รวม ${time.totalDays} วัน</div>
-            </div>
-            
-            <div class="flex justify-center mb-6 transform -rotate-2">
-               <div class="photo-frame w-56 h-56 bg-white p-1 shadow-xl relative">
-                  <div class="absolute -top-3 -right-3 w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-[10px] shadow-lg transform rotate-12 z-20 border-2 border-white stamp-animate text-center leading-tight">APPROVED<br>❤️</div>
-                  <div class="w-full h-full relative overflow-hidden bg-gray-100">
-                    ${slidesHtml}
-                  </div>
-               </div>
-            </div>
-
-            <div class="mb-6 p-5 rounded-2xl bg-white/90 shadow-lg border-2 border-pink-200">
-              <p class="text-lg leading-relaxed font-semibold mb-2 text-pink-800">${config.final_message}</p>
-              <div class="text-sm text-pink-500 font-bold mt-2">- ${config.partner_name} -</div>
-            </div>
-            
-            <button onclick="showPage(1); currentQuestion = 1; hearts = 0; envelopeOpen = false; pleadCount = 0;" class="game-button px-6 py-3 rounded-full font-semibold bg-white border border-pink-200 text-pink-600 text-sm shadow-sm active:bg-gray-50">
-                🔄 เผื่ออยากเล่นอีกครั้ง ฮิๆ
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderPage6(config) {
-      return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-gray-900 text-white p-6 relative overflow-hidden">
-           <div class="absolute inset-0 bg-red-500/10 z-0"></div>
-           <div class="z-10 text-center max-w-xs">
-              <div class="text-7xl mb-4 sad-animate">😿</div>
-              <h1 class="text-2xl font-bold mb-3 text-red-400">ง่ะ! ใจร้ายยย</h1>
-              <p class="text-base mb-6 leading-relaxed opacity-90">รักแมวมากกว่าเค้าหรอ? <br> เค้าเสียใจนะ... กระซิกๆ ☔️</p>
-              <div class="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/20 mb-6"><p class="text-sm italic">"กลับไปตอบใหม่เดี๋ยวนี้เลยนะ! ไม่งั้นงอนจริงด้วย!"</p></div>
-              <button onclick="showPage(2)" class="game-button px-6 py-3 rounded-full bg-pink-500 text-white font-bold text-base shadow-lg active:scale-95">โอ๋ๆ เค้าล้อเล่น 🥺</button>
-           </div>
-        </div>
-      `;
-    }
-
-    renderApp();
   </script>
 </body>
-
 </html>
-
-
-
-
-
