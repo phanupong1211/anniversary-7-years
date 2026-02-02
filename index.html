@@ -321,7 +321,7 @@ function playSound(type) {
           <div class="absolute -top-10 -left-10 w-40 h-40 bg-[#ffe4e9] rounded-full blur-3xl opacity-50"></div>
           <div class="absolute bottom-10 -right-10 w-52 h-52 bg-[#e8f4f8] rounded-full blur-3xl opacity-50"></div>
           
-          <div class="z-10 text-center w-full max-w-xs p-6">
+          <div class="z-10 text-center w-full max-w-xs p-6 flex flex-col min-h-[calc(100dvh-6rem)]">
             <img src="${assets.lock}" class="w-24 h-24 mx-auto mb-6 float-soft drop-shadow-sm">
             <h1 class="text-xl font-bold text-k-text mb-2">Anniversary Day</h1>
             <p class="text-sm text-gray-400 mb-6">ใส่รหัสวันสำคัญของเรา</p>
@@ -335,12 +335,11 @@ function playSound(type) {
               <div onclick="delCode()" class="num-btn text-sm text-gray-400">⌫</div>
             </div>
             
-            <div class="sticky bottom-6">
-  <button onclick="checkCode()"
-    class="w-full py-3.5 bg-k-accent text-white rounded-2xl font-bold shadow-sm btn-minimal hover:bg-pink-300">
-    Unlock ❤️
-  </button>
-</div>
+            <div class="mt-auto pt-6">
+            <button
+            onclick="checkCode()"
+            class="w-full py-3.5 bg-k-accent text-white rounded-2xl font-bold shadow-sm btn-minimal hover:bg-pink-300">Unlock ❤️</button>
+            </div>
 
           </div>
         </div>
@@ -893,4 +892,5 @@ function playSound(type) {
   </script>
 </body>
 </html>
+
 
