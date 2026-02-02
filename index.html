@@ -30,7 +30,8 @@
   <style>
     body {
       font-family: 'Mali', cursive;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
       background-color: #fff9fb; /* พื้นหลังสีขาวอมชมพู */
@@ -317,7 +318,7 @@ function playSound(type) {
     // 1. Lock Screen (กลับไปใช้ข้อความเรียบง่าย)
     function PageLock() {
       return `
-        <div class="w-full min-h-[100dvh] flex flex-col items-center justify-start bg-[#fff9fb] relative overflow-hidden px-4 pt-6 pb-24">
+        <div class="w-full min-h-[100svh] flex flex-col items-center justify-start bg-[#fff9fb] relative overflow-hidden px-4 pt-6 pb-24">
           <div class="absolute -top-10 -left-10 w-40 h-40 bg-[#ffe4e9] rounded-full blur-3xl opacity-50"></div>
           <div class="absolute bottom-10 -right-10 w-52 h-52 bg-[#e8f4f8] rounded-full blur-3xl opacity-50"></div>
           
@@ -335,10 +336,12 @@ function playSound(type) {
               <div onclick="delCode()" class="num-btn text-sm text-gray-400">⌫</div>
             </div>
             
-            <div class="mt-auto pt-6">
+            <div class="mt-auto pt-6 pb-[env(safe-area-inset-bottom)]">
             <button
             onclick="checkCode()"
-            class="w-full py-3.5 bg-k-accent text-white rounded-2xl font-bold shadow-sm btn-minimal hover:bg-pink-300">Unlock ❤️</button>
+            class="w-full py-3.5 bg-k-accent text-white rounded-2xl font-bold shadow-sm btn-minimal">
+            Unlock ❤️
+            </button>
             </div>
 
           </div>
@@ -892,5 +895,6 @@ function playSound(type) {
   </script>
 </body>
 </html>
+
 
 
