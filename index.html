@@ -116,6 +116,7 @@
     }
 
     /* Numpad Cute */
+    @media (max-height: 700px) {
     .num-btn {
       background: white;
       color: #ff8fa3;
@@ -125,7 +126,7 @@
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 10px rgba(239, 239, 239, 0.5);
       transition: all 0.2s;
-    }
+    }}
     .num-btn:active { background: #ffe4e9; transform: scale(0.9); }
 
     /* Utility */
@@ -316,14 +317,14 @@ function playSound(type) {
     // 1. Lock Screen (กลับไปใช้ข้อความเรียบง่าย)
     function PageLock() {
       return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-[#fff9fb] relative overflow-hidden">
+        <div class="w-full min-h-[100dvh] flex flex-col items-center justify-start bg-[#fff9fb] relative overflow-hidden px-4 pt-6 pb-24">
           <div class="absolute -top-10 -left-10 w-40 h-40 bg-[#ffe4e9] rounded-full blur-3xl opacity-50"></div>
           <div class="absolute bottom-10 -right-10 w-52 h-52 bg-[#e8f4f8] rounded-full blur-3xl opacity-50"></div>
           
           <div class="z-10 text-center w-full max-w-xs p-6">
             <img src="${assets.lock}" class="w-24 h-24 mx-auto mb-6 float-soft drop-shadow-sm">
             <h1 class="text-xl font-bold text-k-text mb-2">Anniversary Day</h1>
-            <p class="text-sm text-gray-400 mb-6">ใส่รหัสวันสำคัญของเรา (Hint: 0102)</p>
+            <p class="text-sm text-gray-400 mb-6">ใส่รหัสวันสำคัญของเรา</p>
             
             <input id="pass-input" type="password" readonly class="w-full h-14 rounded-2xl text-center text-2xl tracking-[0.5em] input-box mb-6 focus:outline-none" placeholder="••••">
             
@@ -334,7 +335,13 @@ function playSound(type) {
               <div onclick="delCode()" class="num-btn text-sm text-gray-400">⌫</div>
             </div>
             
-            <button onclick="checkCode()" class="w-full py-3.5 bg-k-accent text-white rounded-2xl font-bold shadow-sm btn-minimal hover:bg-pink-300">Unlock ❤️</button>
+            <div class="sticky bottom-6">
+  <button onclick="checkCode()"
+    class="w-full py-3.5 bg-k-accent text-white rounded-2xl font-bold shadow-sm btn-minimal hover:bg-pink-300">
+    Unlock ❤️
+  </button>
+</div>
+
           </div>
         </div>
       `;
@@ -426,7 +433,7 @@ function playSound(type) {
            
            <div class="z-10 text-center w-full max-w-sm bg-white/80 backdrop-blur p-6 rounded-3xl shadow-sm border border-pink-100">
              <div class="text-6xl mb-4 sad-animate">🥺</div>
-             <h1 class="text-2xl font-bold mb-3 text-k-text">เค้าขอโทษ...</h1>
+             <h1 class="text-2xl font-bold mb-3 text-k-text">ก่อนอื่น เค้าขอโทษนะ..</h1>
              <p class="text-gray-600 mb-4 leading-relaxed text-sm">
                  เค้าลืมทำเซอร์ไพรส์วันครบรอบ...<br>ไม่ได้ตั้งใจจริงๆ นะ<br>ยกโทษให้เค้าเถอะนะคนดี
              </p>
@@ -886,3 +893,4 @@ function playSound(type) {
   </script>
 </body>
 </html>
+
