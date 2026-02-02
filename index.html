@@ -178,11 +178,7 @@
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485047_0.jpg",
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485048_0.jpg",
         "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485049_0.jpg",
-        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485050_0.jpg",
-        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485051_0.jpg",
-        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485052_0.jpg",
-        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485053_0.jpg",
-        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485054_0.jpg"
+        "https://raw.githubusercontent.com/phanupong1211/anniversary-7-years/refs/heads/main/wabaniversary/S__54485050_0.jpg"
       ],
       
       music_url: "wabaniversary/นบหนง.mp3", 
@@ -295,7 +291,7 @@
       if(e.target.closest('button') || e.target.closest('input')) return;
       const el = document.createElement('div');
       el.className = 'pop-heart';
-      el.innerHTML = '🌸', '✨', '☁️', '🤍']Math.floor(Math.random()*4)];
+      el.innerHTML = ['🌸', '✨', '☁️', '🤍'][Math.floor(Math.random()*4)];
       el.style.left = e.clientX + 'px'; el.style.top = e.clientY + 'px';
       document.body.appendChild(el);
       setTimeout(() => el.remove(), 800);
@@ -306,19 +302,19 @@
     // 1. Lock Screen
     function PageLock() {
       return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-#fff9fb] relative overflow-hidden">
-          <div class="absolute -top-10 -left-10 w-40 h-40 bg-#ffe4e9] rounded-full blur-3xl opacity-50"></div>
-          <div class="absolute bottom-10 -right-10 w-52 h-52 bg-#e8f4f8] rounded-full blur-3xl opacity-50"></div>
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#fff9fb] relative overflow-hidden">
+          <div class="absolute -top-10 -left-10 w-40 h-40 bg-[#ffe4e9] rounded-full blur-3xl opacity-50"></div>
+          <div class="absolute bottom-10 -right-10 w-52 h-52 bg-[#e8f4f8] rounded-full blur-3xl opacity-50"></div>
           
           <div class="z-10 text-center w-full max-w-xs p-6">
             <img src="${assets.lock}" class="w-24 h-24 mx-auto mb-6 float-soft drop-shadow-sm">
             <h1 class="text-xl font-bold text-k-text mb-2">Anniversary Day</h1>
             <p class="text-sm text-gray-400 mb-6">ใส่รหัสวันสำคัญของเรา</p>
             
-            <input id="pass-input" type="password" readonly class="w-full h-14 rounded-2xl text-center text-2xl tracking-0.5em] input-box mb-6 focus:outline-none" placeholder="••••">
+            <input id="pass-input" type="password" readonly class="w-full h-14 rounded-2xl text-center text-2xl tracking-[0.5em] input-box mb-6 focus:outline-none" placeholder="••••">
             
             <div class="grid grid-cols-3 gap-4 px-4 mb-6">
-              ${1,2,3,4,5,6,7,8,9].map(n => `<div onclick="typeCode('${n}')" class="num-btn">${n}</div>`).join('')}
+              ${[1,2,3,4,5,6,7,8,9].map(n => `<div onclick="typeCode('${n}')" class="num-btn">${n}</div>`).join('')}
               <div onclick="clearCode()" class="num-btn text-sm text-gray-400">C</div>
               <div onclick="typeCode('0')" class="num-btn">0</div>
               <div onclick="delCode()" class="num-btn text-sm text-gray-400">⌫</div>
@@ -334,8 +330,8 @@
     function PageSuccess() {
       setTimeout(() => { for(let i=0; i<15; i++) setTimeout(spawnConfetti, i*150); }, 100);
       return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-#f0fdf4] relative overflow-hidden">
-           <div class="absolute inset-0 opacity-30 bg-url('https://www.transparenttextures.com/patterns/confetti.png')]"></div>
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#f0fdf4] relative overflow-hidden">
+           <div class="absolute inset-0 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/confetti.png')]"></div>
            <div class="z-10 text-center p-6 bounce-in">
              <div class="text-7xl mb-4">🎉</div>
              <h1 class="text-3xl font-bold text-green-600 mb-2">ถูกต้องนะค้าบ!</h1>
@@ -351,8 +347,8 @@
     // 7. Plead Page
     function PagePlead() {
       return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-#fff0f3] relative p-6">
-           <div class="absolute inset-0 opacity-20 bg-url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#fff0f3] relative p-6">
+           <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
            
            <div class="z-10 text-center w-full max-w-sm bg-white/80 backdrop-blur p-6 rounded-3xl shadow-sm border border-pink-100">
              <div class="text-6xl mb-4 sad-animate">🥺</div>
@@ -364,7 +360,7 @@
              <div id="plead-msg" class="h-8 mb-4 text-pink-500 font-bold text-sm animate-pulse"></div>
 
              <div class="flex flex-col gap-3 w-full">
-                 <button onclick="goTo(8)" class="w-full py-3.5 rounded-2xl bg-#a7f3d0] text-green-700 font-bold shadow-sm btn-minimal border border-green-200">
+                 <button onclick="goTo(8)" class="w-full py-3.5 rounded-2xl bg-[#a7f3d0] text-green-700 font-bold shadow-sm btn-minimal border border-green-200">
                      ยกโทษให้ (ดีกันนะ) ❤️
                  </button>
                  <button onclick="doPlead()" id="btn-plead" class="w-full py-3 rounded-2xl bg-gray-100 text-gray-500 font-medium btn-minimal">
@@ -381,7 +377,7 @@
        // Effect
        setTimeout(() => { for(let i=0; i<15; i++) setTimeout(spawnConfetti, i*150); }, 100);
        return `
-        <div class="w-full h-full flex flex-col items-center justify-center bg-#fffceb] relative p-6 overflow-hidden">
+        <div class="w-full h-full flex flex-col items-center justify-center bg-[#fffceb] relative p-6 overflow-hidden">
            <img src="${assets.happy}" class="w-32 h-32 mb-6 float-soft drop-shadow-md">
            <h1 class="text-3xl font-bold mb-2 text-k-text">เย้!! ดีกันแล้ว 🎉</h1>
            <p class="text-gray-500 mb-8 text-center leading-relaxed px-4">
@@ -400,8 +396,8 @@
       const q = state.q === 1 ? config.q1 : config.q2;
       
       // เลือกรูปมาแสดงตามข้อ (ดึงจาก gallery_images)
-      const img1 = state.q === 1 ? config.gallery_images[6] : config.gallery_images[7];
-      const img2 = state.q === 1 ? config.gallery_images[8] : config.gallery_images[9];
+      const img1 = state.q === 1 ? config.gallery_images[0] : config.gallery_images[2];
+      const img2 = state.q === 1 ? config.gallery_images[1] : config.gallery_images[3];
 
       return `
         <div class="w-full h-full flex flex-col items-center justify-center bg-white relative overflow-hidden">
@@ -798,4 +794,3 @@
   </script>
 </body>
 </html>
-
